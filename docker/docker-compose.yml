@@ -1,0 +1,11 @@
+version: '2'
+services:
+  postgres:
+    image: postgres:13.0-alpine
+    environment:
+      POSTGRES_USER: parkon
+      POSTGRES_PASSWORD: parkon
+      POSTGRES_DB: parkon
+    ports:
+      - 5432:5432
+    
