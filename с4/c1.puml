@@ -1,0 +1,27 @@
+@startuml C4_Elements
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Container.puml
+
+Person(customer, "Пользователь", "системы Паркон")
+
+Enterprise_Boundary(c1, "Parkon") {
+    Container(front, "Parkon App", "User", "Мобильное приложение")
+    Container(back, "Система Паркон", "User", "Сервис размещенный ")
+}
+System(maps, "Карты", "Поставщик карт")
+
+Container(ext_cam_1, "ТСЖ 1", "CCTV")
+Container(ext_cam_2, "ТСЖ 2", "CCTV")
+Container(ext_cam_3, "ТСЖ 3", "CCTV")
+
+
+Rel(customer, front, "UI")
+
+Rel(front, back, "HTTPS")
+
+Lay_L(front, maps)
+Rel_Back(front, maps, "")
+
+Rel(back, ext_cam_1, "HTTPS")
+Rel(back, ext_cam_2, "HTTPS")
+Rel(back, ext_cam_3, "HTTPS")
+@enduml

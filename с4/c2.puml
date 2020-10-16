@@ -1,0 +1,48 @@
+@startuml C4_Elements
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Container.puml
+
+Container(front, "Mobile App", "Android/IOS", "Мобильное приложение")
+Boundary(c1, "Масштабируемый кластер") {
+
+    Container(service, "Service", "Kotlin", "Обработка данных для передачи в UI")
+    Container(stat, "Statistics", "Система анализа и статистики", "Действия пользоватлей, статистика парковных мест")
+
+    ContainerDb(postgresql, "База данных", "Postgresql")
+
+    Container(mapper, "Mapper", "Kotlin", "Асинхронно отправляет фото на обработку; Записывает результат в БД")
+
+    Container(cv, "CV Service", "CV + ML", "Алгоритм определения заполненности парковки")
+}
+
+System(maps, "API Карт", "Карта Москвы для отображения парковок")
+
+Container(t1_adapter, "Технический Адаптер", "Hardware", "На стороне ТСЖ (если невозможно получить данные напрямую с камеры)")
+Container(t2_adapter, "Программный Адаптер", "Software", "На стороне ТСЖ (если неподходящий формат данных с камеры)")
+
+Container(ext_cam_1, "ТСЖ 1 Камера", "CCTV")
+Container(ext_cam_2, "ТСЖ 2 Камера", "CCTV")
+Container(ext_cam_3, "ТСЖ 3 Камера", "CCTV")
+
+
+Rel_Back(front, maps, "HTTP")
+
+Rel_R(front, service, "HTTPS", "Rest API")
+Rel_L(stat, service, "HTTP")
+Lay_R(service, stat)
+
+Rel(service, postgresql, "JDBC", "Получение текущего статуса парковки")
+Rel(stat, postgresql, "JDBC")
+Rel(mapper, postgresql, "JDBC", "Статус парковки")
+
+Lay_D(postgresql, mapper)
+Rel_R(mapper, cv, "HTTP", "Шаблон + Фото")
+Rel_L(cv, mapper, "HTTP", "Результат")
+
+Rel_Back(t1_adapter, ext_cam_1, "-")
+Rel_Back(mapper, t1_adapter, "HTTP")
+
+Rel_Back(t2_adapter, ext_cam_2, "-")
+Rel_Back(mapper, t2_adapter, "HTTP")
+
+Rel_Back(mapper, ext_cam_3, "HTTP")
+@enduml
