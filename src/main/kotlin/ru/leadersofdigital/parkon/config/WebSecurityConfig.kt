@@ -15,14 +15,4 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         http.authorizeRequests()
             .anyRequest().permitAll()
     }
-
-    /* @Bean
-     public override fun userDetailsService(): UserDetailsService {
-         val user: UserDetails = User.withDefaultPasswordEncoder()
-             .username("user")
-             .password("password")
-             .roles("USER")
-             .build()
-         return InMemoryUserDetailsManager(user)
-     }*/
 }

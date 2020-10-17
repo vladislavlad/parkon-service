@@ -17,3 +17,4 @@ create table auth.user_roles
     constraint user_roles_users_id_fk foreign key (user_id) references auth.users
 );
 
+
